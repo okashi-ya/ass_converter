@@ -1,6 +1,5 @@
-@ECHO OFF
+@echo off
 
-call ./ass_converter/venv/Scripts/activate
-python ./ass_converter/main.py
+.\Python311\python.exe .\ass_converter\main.py
 
 PAUSE
