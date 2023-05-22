@@ -1,7 +1,8 @@
 # ass_converter
 一个可以将B站弹幕转换成ass字幕格式的工具。
 
-个人项目，需要的请自取。
+开发：古守のお菓子屋
+链接：https://space.bilibili.com/253052708
 
 ### 用法
 将需要转换的弹幕文件放入danmu目录下，运行ass_converter.bat。
