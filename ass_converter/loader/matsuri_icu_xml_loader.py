@@ -2,6 +2,7 @@ import re
 from loader.base_loader import BaseLoader
 from config import AssConverterConfig
 from filter.danmu_filter import DanmuFilter
+from log.logger import Logger
 
 class MatsuriICUXmlLoader(BaseLoader):
     def _data_analyse_handle(self, analysing_data):
@@ -20,6 +21,7 @@ class MatsuriICUXmlLoader(BaseLoader):
         self._dst_danmu_data["start_time"] = int(file_name_data[-2]) / 1e3
 
         danmus = dom_tree.getElementsByTagName("d")
+        Logger.debug(f"src_file_name = {self._dst_danmu_data['src_file_name']} danmu_count = {len(danmus)}")
         for danmu in danmus:
             # 这个xml缺失的内容特别多 SC和礼物无法区分 直接全体遍历
             danmu_text = danmu.firstChild.data

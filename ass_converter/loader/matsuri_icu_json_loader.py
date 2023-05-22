@@ -1,7 +1,7 @@
-import re
 from loader.base_loader import BaseLoader
 from config import AssConverterConfig
 from filter.danmu_filter import DanmuFilter
+from log.logger import Logger
 
 
 class MatsuriICUJSONLoader(BaseLoader):
@@ -12,6 +12,7 @@ class MatsuriICUJSONLoader(BaseLoader):
         self._dst_danmu_data["dst_file_name"] = f"{live_info['name']} {live_info['title']}.ass"
         self._dst_danmu_data["start_time"] = int(live_info["start_time"]) / 1e3
 
+        Logger.debug(f"src_file_name = {self._dst_danmu_data['src_file_name']} danmu_count = {len(danmus)}")
         for danmu in danmus:
             if danmu.get("gift_name") is not None or \
                     danmu.get("superchat_price") is not None:

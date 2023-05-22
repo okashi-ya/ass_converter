@@ -21,7 +21,7 @@ class LoaderType(enum.IntEnum):
 
 class LoaderFactory:
     @classmethod
-    def create_loader(cls, src_file: str, danmu_data: str) -> BaseLoader:
+    def create_loader(cls, src_file: str, danmu_data: str) -> BaseLoader | None:
         loader_data_dict = cls.__get_loader_data_type(danmu_data)
         Logger.info(f"已创建加载器 类型 : {loader_data_dict['type'].name}")
         match loader_data_dict["type"]:
@@ -35,7 +35,8 @@ class LoaderFactory:
                 return DanmakusJSONLoader(src_file, loader_data_dict["data"])
             case LoaderType.LOADER_TYPE_DANMAKUS_XML:
                 return DanmakusXMLLoader(src_file, loader_data_dict["data"])
-        Logger.fatal(f"非法的加载器类型 !")
+        Logger.error(f"无法获取 {src_file} 的加载器类型 !")
+        return None
 
     @classmethod
     def __danmaku_xml_pre_handle(cls, danmu_data: str):
@@ -85,6 +86,8 @@ class LoaderFactory:
                 elif len(json_data) == 3 and json_data.get("danmakus") is not None:
                     # 有3个字段 且有一个为danmakus的为Danmakus的json弹幕
                     return {"type": LoaderType.LOADER_TYPE_DANMAKUS_JSON, "data": json_data}
+                else:
+                    # 未知json
+                    return {"type": LoaderType.LOADER_TYPE_INVALID, "data": None}
             except json.decoder.JSONDecodeError:
-                print("INVALID")
                 return {"type": LoaderType.LOADER_TYPE_INVALID, "data": None}

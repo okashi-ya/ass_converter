@@ -1,7 +1,7 @@
 import pandas
-import re
 from loader.base_loader import BaseLoader
 from filter.danmu_filter import DanmuFilter
+from log.logger import Logger
 
 
 class BililiveRecorderXMLLoader(BaseLoader):
@@ -23,6 +23,7 @@ class BililiveRecorderXMLLoader(BaseLoader):
                 format="%Y-%m-%dT%H:%M:%S.%f"
             ).tz_localize('Asia/Shanghai').timestamp()
 
+        Logger.debug(f"src_file_name = {self._dst_danmu_data['src_file_name']} danmu_count = {len(danmus)}")
         for danmu in danmus:
             danmu_text = danmu.firstChild.data
             if DanmuFilter.filter_check(danmu_text):

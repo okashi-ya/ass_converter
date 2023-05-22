@@ -82,7 +82,7 @@ class AssWriter:
 
             # 时间字符串
             time_ymd = datetime.datetime.fromtimestamp(file_data["start_time"]).strftime("%Y-%m-%d")
-            f = open(f"{AssConverterConfig.OutputDir}{time_ymd} {file_name}", "wb")
+            f = open(f"{AssConverterConfig.OutputDir}ass_converter {time_ymd} {file_name}", "wb")
             f.write(ass_head.encode("utf-8"))
             for single_danmu_data in cp_file_data:
                 f.write(self.__single_danmu_data_to_ass_line(single_danmu_data))

@@ -1,7 +1,6 @@
-import re
 from loader.base_loader import BaseLoader
-from config import AssConverterConfig
 from filter.danmu_filter import DanmuFilter
+from log.logger import Logger
 
 class DanmakusJSONLoader(BaseLoader):
     def _data_analyse_handle(self, analysing_data):
@@ -11,6 +10,7 @@ class DanmakusJSONLoader(BaseLoader):
         self._dst_danmu_data["dst_file_name"] = f"{channel_info['uName']} {channel_info['title']}.ass"
         self._dst_danmu_data["start_time"] = int(json_dict["live"]["startDate"]) / 1e3
 
+        Logger.debug(f"src_file_name = {self._dst_danmu_data['src_file_name']} danmu_count = {len(danmus)}")
         for danmu in danmus:
             if danmu.get("price") is not None:
                 # 礼物 舰长 SC全都是

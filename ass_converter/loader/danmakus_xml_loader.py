@@ -1,6 +1,5 @@
 import re
 from loader.base_loader import BaseLoader
-from config import AssConverterConfig
 from filter.danmu_filter import DanmuFilter
 from log.logger import Logger
 
@@ -20,8 +19,8 @@ class DanmakusXMLLoader(BaseLoader):
         start_date = int(live_info.getElementsByTagName("startDate")[0].firstChild.data)
         self._dst_danmu_data["start_time"] = start_date / 1e3
 
+        Logger.debug(f"src_file_name = {self._dst_danmu_data['src_file_name']} danmu_count = {len(danmus)}")
         for danmu in danmus:
-
             if len(danmu.getElementsByTagName("price")) != 0:
                 continue
             # 有可能会有图片 不过过滤同传弹幕的话是肯定会过滤掉的
