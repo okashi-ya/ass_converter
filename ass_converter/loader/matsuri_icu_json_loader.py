@@ -25,6 +25,6 @@ class MatsuriICUJSONLoader(BaseLoader):
                     {
                         "time": danmu_time,
                         # 完整弹幕则主动筛选出同传弹幕 否则直接将所有弹幕接入
-                        "text": re.sub("[【】]", "", danmu_text) if AssConverterConfig.MatsuriICUFullDanmu else danmu_text
+                        "text": DanmuFilter.filter_sub(danmu_text) if AssConverterConfig.MatsuriICUFullDanmu else danmu_text
                     }
                 )

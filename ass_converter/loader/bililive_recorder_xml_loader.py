@@ -31,6 +31,6 @@ class BililiveRecorderXMLLoader(BaseLoader):
                 self._dst_danmu_data["data"].append(
                     {
                         "time": danmu_time,
-                        "text": re.sub("[【】]", "", danmu_text)  # 剔除掉【】
+                        "text": DanmuFilter.filter_sub(danmu_text)
                     }
                 )

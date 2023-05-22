@@ -6,7 +6,7 @@ from log.logger import Logger
 
 class DanmakusXMLLoader(BaseLoader):
     def _data_analyse_handle(self, analysing_data):
-        dom_tree = analysing_data.getElementsByTagName("tmp")[0]
+        dom_tree = analysing_data.getElementsByTagName("danmakus_root")[0]
 
         channel_info = dom_tree.getElementsByTagName("channel")[0]
         live_info = dom_tree.getElementsByTagName("live")[0]
@@ -33,6 +33,6 @@ class DanmakusXMLLoader(BaseLoader):
                     {
                         "time": danmu_time,
                         # 完整弹幕则主动筛选出同传弹幕 否则直接将所有弹幕接入
-                        "text": re.sub("[【】]", "", danmu_text) if AssConverterConfig.MatsuriICUFullDanmu else danmu_text
+                        "text": DanmuFilter.filter_sub(danmu_text)
                     }
                 )

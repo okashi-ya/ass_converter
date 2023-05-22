@@ -53,7 +53,7 @@ class LoaderFactory:
                 danmu_data[danmu_data.find("</onlineRank>") + len("</onlineRank>"):]
             is_danmaku_xml = True
         if is_danmaku_xml:
-            danmu_data = f"<tmp>{danmu_data}</tmp>"
+            danmu_data = f"<danmakus_root>{danmu_data}</danmakus_root>"
             Logger.warning("检测到Danmakus的xml弹幕。该文件不是标准的xml格式。已进行兼容性转换。")
         return danmu_data
 
