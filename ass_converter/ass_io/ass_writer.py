@@ -93,12 +93,17 @@ class AssWriter:
     @classmethod
     def __single_danmu_data_to_ass_line(cls, single_data):
         # 单个弹幕数据转换成ass的一行数据
-        time_ms = single_data["time"]
+        time_s = single_data["time"]
         text = single_data["text"]
+        time_str_start = cls.__get_ass_time_str(time_s)
+        time_str_end = cls.__get_ass_time_str(time_s + 10)    # 开始到结束共10s
+        return f"Dialogue: 0,{time_str_start},{time_str_end},Default,,0,0,0,,{text}\n".encode("utf-8")
+
+    @classmethod
+    def __get_ass_time_str(cls, time_ms):
         ms = int(time_ms * 100 % 100)
         minute, sec = divmod(time_ms, 60)
         hour, minute = divmod(minute, 60)
-        time_str = "%d:%02d:%02d.%02d" % (hour, minute, sec, ms)
-        return f"Dialogue: 0,{time_str},{time_str},Default,,0,0,0,,{text}\n".encode("utf-8")
+        return "%d:%02d:%02d.%02d" % (hour, minute, sec, ms)
 
     writer_danmu_data: dict

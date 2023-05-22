@@ -14,7 +14,7 @@ class MatsuriICUXmlLoader(BaseLoader):
         user_name = file_name_data[0]
         user_title = ""
         for i in range(1, len(file_name_data) - 2):
-            user_title += f"_{file_name_data[i]}"
+            user_title += f" {file_name_data[i]}"
 
         self._dst_danmu_data["dst_file_name"] = \
             f"{user_name} {user_title}.ass"
