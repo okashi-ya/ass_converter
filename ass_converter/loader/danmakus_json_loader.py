@@ -2,6 +2,7 @@ from loader.base_loader import BaseLoader
 from filter.danmu_filter import DanmuFilter
 from log.logger import Logger
 
+
 class DanmakusJSONLoader(BaseLoader):
     def _data_analyse_handle(self, analysing_data):
         json_dict = analysing_data
@@ -24,6 +25,7 @@ class DanmakusJSONLoader(BaseLoader):
                     {
                         "time": danmu_time,
                         # 完整弹幕则主动筛选出同传弹幕 否则直接将所有弹幕接入
-                        "text": DanmuFilter.filter_sub(danmu_text)
+                        "text": DanmuFilter.filter_sub(danmu_text),
+                        "prefix": DanmuFilter.filter_get_danmu_prefix(danmu_text)
                     }
                 )

@@ -10,13 +10,14 @@ from loader.danmakus_json_loader import DanmakusJSONLoader
 from loader.danmakus_xml_loader import DanmakusXMLLoader
 from log.logger import Logger
 
+
 class LoaderType(enum.IntEnum):
     LOADER_TYPE_INVALID = 0  # 未知
-    LOADER_TYPE_BILILIVE_RECORDER_XML = 1  # 录播姬的xml
-    LOADER_TYPE_MATSURI_ICU_JSON = 2  # MatsuriICU的Json
-    LOADER_TYPE_MATSURI_ICU_XML = 3  # MatsuriICU的xml
-    LOADER_TYPE_DANMAKUS_JSON = 4  # Danmakus的json
-    LOADER_TYPE_DANMAKUS_XML = 5  # Danmakus的xml
+    LOADER_TYPE_BILILIVE_RECORDER_XML = 1   # 录播姬的xml
+    LOADER_TYPE_MATSURI_ICU_JSON = 2        # MatsuriICU的Json
+    LOADER_TYPE_MATSURI_ICU_XML = 3         # MatsuriICU的xml
+    LOADER_TYPE_DANMAKUS_JSON = 4           # Danmakus的json
+    LOADER_TYPE_DANMAKUS_XML = 5            # Danmakus的xml
 
 
 class LoaderFactory:
@@ -45,12 +46,12 @@ class LoaderFactory:
         is_danmaku_xml = False
         if danmu_data.find("<wordCloud>") != -1 and danmu_data.find("</wordCloud>") != -1:
             danmu_data = \
-                danmu_data[:danmu_data.find("<wordCloud>")] +\
+                danmu_data[:danmu_data.find("<wordCloud>")] + \
                 danmu_data[danmu_data.find("</wordCloud>") + len("</wordCloud>"):]
             is_danmaku_xml = True
         if danmu_data.find("<onlineRank>") != -1 and danmu_data.find("</onlineRank>") != -1:
             danmu_data = \
-                danmu_data[:danmu_data.find("<onlineRank>")] +\
+                danmu_data[:danmu_data.find("<onlineRank>")] + \
                 danmu_data[danmu_data.find("</onlineRank>") + len("</onlineRank>"):]
             is_danmaku_xml = True
         if is_danmaku_xml:

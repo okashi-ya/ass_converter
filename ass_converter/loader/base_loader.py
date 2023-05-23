@@ -7,7 +7,7 @@ _dst_danmu_data 结构：
     "dst_file_name": str,
     "start_time": float,
     "data": [
-        { "time": float, "text": str }...
+        { "time": float, "text": str, "prefix": str }...
     ]
 }
 '''

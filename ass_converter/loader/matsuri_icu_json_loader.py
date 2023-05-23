@@ -21,11 +21,12 @@ class MatsuriICUJSONLoader(BaseLoader):
                 continue
             danmu_text = danmu["text"]
             danmu_time = (int(danmu["time"]) - live_info["start_time"]) / 1e3  # 计算开播后的时间
-            if not AssConverterConfig.MatsuriICUFullDanmu or DanmuFilter.filter_check(danmu_text):
+            if not AssConverterConfig.matsuriicu_full_danmu or DanmuFilter.filter_check(danmu_text):
                 self._dst_danmu_data["data"].append(
                     {
                         "time": danmu_time,
                         # 完整弹幕则主动筛选出同传弹幕 否则直接将所有弹幕接入
-                        "text": DanmuFilter.filter_sub(danmu_text) if AssConverterConfig.MatsuriICUFullDanmu else danmu_text
+                        "text": DanmuFilter.filter_sub(danmu_text) if AssConverterConfig.matsuriicu_full_danmu else danmu_text,
+                        "prefix": DanmuFilter.filter_get_danmu_prefix(danmu_text)
                     }
                 )

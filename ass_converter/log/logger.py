@@ -30,10 +30,10 @@ class Logger:
 
     @classmethod
     def __out_log(cls, log_level, log):
-        if not os.path.exists(AssConverterConfig.LogDir):
-            os.makedirs(AssConverterConfig.LogDir)
+        if not os.path.exists(AssConverterConfig.log_dir):
+            os.makedirs(AssConverterConfig.log_dir)
         log_str = f"[{log_level}]{log}"
-        f = open(f"{AssConverterConfig.LogDir}{g_log_file_name}", "ab+")
+        f = open(f"{AssConverterConfig.log_dir}{g_log_file_name}", "ab+")
         f.write((log_str + "\n").encode("utf-8"))
         f.close()
         match log_level:

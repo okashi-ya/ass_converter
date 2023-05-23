@@ -15,3 +15,7 @@ class DanmuFilter:
             # 同传弹幕格式前有内容
             text = text.replace("【", " ", 1)
         return re.sub("[【】]", "", text)
+
+    @classmethod
+    def filter_get_danmu_prefix(cls, text: str):
+        return text[0:text.find("【")]

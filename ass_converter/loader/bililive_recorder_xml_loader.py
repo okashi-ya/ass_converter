@@ -32,6 +32,7 @@ class BililiveRecorderXMLLoader(BaseLoader):
                 self._dst_danmu_data["data"].append(
                     {
                         "time": danmu_time,
-                        "text": DanmuFilter.filter_sub(danmu_text)
+                        "text": DanmuFilter.filter_sub(danmu_text),
+                        "prefix": DanmuFilter.filter_get_danmu_prefix(danmu_text)
                     }
                 )
