@@ -78,25 +78,28 @@ class AssWriter:
         for file_name, file_data in self.writer_danmu_data.items():
             Logger.info(f"开始写入弹幕文件，共计{len(self.writer_danmu_data)}个，当前写入第{cur_index}个")
             cp_file_data = copy.deepcopy(file_data["data"])
-            sorted(cp_file_data, key=lambda x: x["time"])  # 按时间排序
+            sorted_file_data = sorted(cp_file_data, key=lambda x: x["time"])  # 按时间排序
 
             # 时间字符串
             time_ymd = datetime.datetime.fromtimestamp(file_data["start_time"]).strftime("%Y-%m-%d")
             f = open(f"{AssConverterConfig.OutputDir}ass_converter {time_ymd} {file_name}", "wb")
             f.write(ass_head.encode("utf-8"))
-            for single_danmu_data in cp_file_data:
-                f.write(self.__single_danmu_data_to_ass_line(single_danmu_data))
+            for i in range(0, len(sorted_file_data)):
+                # 下一个弹幕的开始时间
+                next_start_time = sorted_file_data[i + 1]["time"] if i + 1 != len(sorted_file_data) else (2 << 32)
+                f.write(self.__single_danmu_data_to_ass_line(sorted_file_data[i], next_start_time))
             f.close()
 
             cur_index += 1
 
     @classmethod
-    def __single_danmu_data_to_ass_line(cls, single_data):
+    def __single_danmu_data_to_ass_line(cls, single_data, next_start_time):
         # 单个弹幕数据转换成ass的一行数据
         time_s = single_data["time"]
+        next_time_s = min(time_s + 10, next_start_time) # 最大间隔10s 不到10s的取下一次时间即可
         text = single_data["text"]
         time_str_start = cls.__get_ass_time_str(time_s)
-        time_str_end = cls.__get_ass_time_str(time_s + 10)    # 开始到结束共10s
+        time_str_end = cls.__get_ass_time_str(next_time_s)
         return f"Dialogue: 0,{time_str_start},{time_str_end},Default,,0,0,0,,{text}\n".encode("utf-8")
 
     @classmethod
