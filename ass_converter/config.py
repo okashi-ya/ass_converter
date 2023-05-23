@@ -14,7 +14,7 @@ class AssConverterConfig:
             user_config = yaml.safe_load(f)
 
             for prefix, single_style in user_config["ass_style"].items():
-                AssConverterConfig.ass_style[prefix] = {
+                AssConverterConfig.ass_style[str(prefix)] = {   # prefix 如果是纯数字之类的就需要转换一下
                     "ass_style_name": single_style.split(",")[0],
                     "style": single_style}
             cls.matsuriicu_full_danmu = user_config["matsuriicu_full_danmu"]

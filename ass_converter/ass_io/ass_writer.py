@@ -1,7 +1,6 @@
 import copy
 import datetime
-import os.path
-
+import re
 import numpy
 from config import AssConverterConfig
 from log.logger import Logger
@@ -128,8 +127,10 @@ class AssWriter:
         time_str_start = cls.__get_ass_time_str(time_s)
         time_str_end = cls.__get_ass_time_str(next_time_s)
         style = "Default"
-        if AssConverterConfig.ass_style.get(single_data["prefix"]) is not None:
-            style = AssConverterConfig.ass_style[single_data["prefix"]]["ass_style_name"]   # 填字幕的名字
+
+        prefix = re.sub(r"\W", "", single_data["prefix"])   # 转发同传会加一个特殊符号 这个符号一般来说是可以用\W过滤的
+        if AssConverterConfig.ass_style.get(prefix) is not None:
+            style = AssConverterConfig.ass_style[prefix]["ass_style_name"]   # 填字幕的名字
         return f"Dialogue: 0,{time_str_start},{time_str_end},{style},,0,0,0,,{text}\n".encode("utf-8")
 
     @classmethod
