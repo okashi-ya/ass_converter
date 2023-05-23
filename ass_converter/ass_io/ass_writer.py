@@ -131,6 +131,9 @@ class AssWriter:
         prefix = re.sub(r"\W", "", single_data["prefix"])   # 转发同传会加一个特殊符号 这个符号一般来说是可以用\W过滤的
         if AssConverterConfig.ass_style.get(prefix) is not None:
             style = AssConverterConfig.ass_style[prefix]["ass_style_name"]   # 填字幕的名字
+        else:
+            # 如果找不到样式 就把prefix加到最前面 避免出现大批量default还找不到同传目标的问题
+            text = f"{prefix} {text}"
         return f"Dialogue: 0,{time_str_start},{time_str_end},{style},,0,0,0,,{text}\n".encode("utf-8")
 
     @classmethod

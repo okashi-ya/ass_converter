@@ -18,5 +18,3 @@ class AssConverterConfig:
                     "ass_style_name": single_style.split(",")[0],
                     "style": single_style}
             cls.matsuriicu_full_danmu = user_config["matsuriicu_full_danmu"]
-            print(user_config)
-        pass
