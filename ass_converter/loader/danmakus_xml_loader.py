@@ -32,6 +32,7 @@ class DanmakusXMLLoader(BaseLoader):
                     {
                         "time": danmu_time,
                         # 完整弹幕则主动筛选出同传弹幕 否则直接将所有弹幕接入
-                        "text": DanmuFilter.filter_sub(danmu_text)
+                        "text": DanmuFilter.filter_sub(danmu_text),
+                        "prefix": DanmuFilter.filter_get_danmu_prefix(danmu_text)
                     }
                 )
