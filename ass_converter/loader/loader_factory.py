@@ -1,4 +1,5 @@
 import json
+import re
 import xml.etree.ElementTree
 import xml.dom.minidom
 import enum
@@ -8,6 +9,8 @@ from loader.matsuri_icu_json_loader import MatsuriICUJSONLoader
 from loader.matsuri_icu_xml_loader import MatsuriICUXmlLoader
 from loader.danmakus_json_loader import DanmakusJSONLoader
 from loader.danmakus_xml_loader import DanmakusXMLLoader
+from loader.blrec_xml_loader import BlrecXMLLoader
+from loader.jjdown_xml_loader import JJDownXMLLoader
 from log.logger import Logger
 
 
@@ -18,12 +21,14 @@ class LoaderType(enum.IntEnum):
     LOADER_TYPE_MATSURI_ICU_XML = 3         # MatsuriICU的xml
     LOADER_TYPE_DANMAKUS_JSON = 4           # Danmakus的json
     LOADER_TYPE_DANMAKUS_XML = 5            # Danmakus的xml
+    LOADER_TYPE_BLREC_XML = 6               # blrec录播工具的xml
+    LOADER_TYPE_JJDOWN_XML = 7              # 唧唧Down下载工具的xml
 
 
 class LoaderFactory:
     @classmethod
     def create_loader(cls, src_file: str, danmu_data: str) -> BaseLoader | None:
-        loader_data_dict = cls.__get_loader_data_type(danmu_data)
+        loader_data_dict = cls.__get_loader_data_type(src_file, danmu_data)
         Logger.info(f"已创建加载器 类型 : {loader_data_dict['type'].name}")
         match loader_data_dict["type"]:
             case LoaderType.LOADER_TYPE_BILILIVE_RECORDER_XML:
@@ -36,6 +41,10 @@ class LoaderFactory:
                 return DanmakusJSONLoader(src_file, loader_data_dict["data"])
             case LoaderType.LOADER_TYPE_DANMAKUS_XML:
                 return DanmakusXMLLoader(src_file, loader_data_dict["data"])
+            case LoaderType.LOADER_TYPE_BLREC_XML:
+                return BlrecXMLLoader(src_file, loader_data_dict["data"])
+            case LoaderType.LOADER_TYPE_JJDOWN_XML:
+                return JJDownXMLLoader(src_file, loader_data_dict["data"])
         Logger.error(f"无法获取 {src_file} 的加载器类型 !")
         return None
 
@@ -60,7 +69,7 @@ class LoaderFactory:
         return danmu_data
 
     @classmethod
-    def __get_loader_data_type(cls, danmu_data: str):
+    def __get_loader_data_type(cls, src_file: str, danmu_data: str):
         danmu_data = cls.__danmaku_xml_pre_handle(danmu_data)
 
         try:
@@ -73,9 +82,19 @@ class LoaderFactory:
             elif len(dom_tree.getElementsByTagName("danmakus")) != 0:
                 # 有danmakus的为Danmakus弹幕文件
                 return {"type": LoaderType.LOADER_TYPE_DANMAKUS_XML, "data": dom_tree}
+            elif len(dom_tree.getElementsByTagName("recorder")) != 0 and \
+                    str.find(dom_tree.getElementsByTagName("recorder")[0].firstChild.data, "blrec") != -1:
+                # 有recorder且对应内容为blrec的弹幕文件
+                return {"type": LoaderType.LOADER_TYPE_BLREC_XML, "data": dom_tree}
             else:
-                # Matsuri的弹幕文件几乎没有特征 直接放在else里
-                return {"type": LoaderType.LOADER_TYPE_MATSURI_ICU_XML, "data": dom_tree}
+                # Matsuri和唧唧Down的弹幕文件几乎没有特征 直接放在else里
+                # 它们依赖文件名做判断
+
+                # 唧唧Down的文件名结尾会有(AvXXXX,P?)的字样
+                if re.search(r"(\(Av[0-9]*,P[0-9]*\))", src_file) is not None:
+                    return {"type": LoaderType.LOADER_TYPE_JJDOWN_XML, "data": dom_tree}
+                else:
+                    return {"type": LoaderType.LOADER_TYPE_MATSURI_ICU_XML, "data": dom_tree}
         except xml.parsers.expat.ExpatError:
             # 判断是否为json格式
             try:

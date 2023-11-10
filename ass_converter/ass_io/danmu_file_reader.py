@@ -2,6 +2,7 @@ import os
 from config import AssConverterConfig
 from log.logger import Logger
 
+
 class DanmuFileReaderData:
     src_file_name: str
     src_file_data: str

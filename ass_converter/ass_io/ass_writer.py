@@ -77,7 +77,11 @@ class AssWriter:
                 pre_prefix_index_dict[prefix] = i
 
             # 时间字符串
-            time_ymd = datetime.datetime.fromtimestamp(file_data["start_time"]).strftime("%Y-%m-%d")
+            if file_data["start_time"] == 0:
+                Logger.warning("start_time时间无效。")
+                time_ymd = "【未知时间】"
+            else:
+                time_ymd = datetime.datetime.fromtimestamp(file_data["start_time"]).strftime("%Y-%m-%d")
             f = open(f"{AssConverterConfig.output_dir}ass_converter {time_ymd} {file_name}", "wb")
             f.write(ass_head.encode("utf-8"))
 
@@ -123,12 +127,14 @@ class AssWriter:
         # 单个弹幕数据转换成ass的一行数据
         time_s = single_data["time"]
         next_time_s = single_data["time_final"]
-        text = single_data["text"]
         time_str_start = cls.__get_ass_time_str(time_s)
         time_str_end = cls.__get_ass_time_str(next_time_s)
         style = "Default"
 
+        if single_data["prefix"] != "56":
+            a = 10
         prefix = re.sub(r"\W", "", single_data["prefix"])   # 转发同传会加一个特殊符号 这个符号一般来说是可以用\W过滤的
+        text = re.sub(r"\W", "", single_data["text"])
         if AssConverterConfig.ass_style.get(prefix) is not None:
             style = AssConverterConfig.ass_style[prefix]["ass_style_name"]   # 填字幕的名字
         else:
