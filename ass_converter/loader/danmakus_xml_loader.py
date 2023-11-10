@@ -3,6 +3,7 @@ from loader.base_loader import BaseLoader
 from filter.danmu_filter import DanmuFilter
 from log.logger import Logger
 
+
 class DanmakusXMLLoader(BaseLoader):
     def _data_analyse_handle(self, analysing_data):
         dom_tree = analysing_data.getElementsByTagName("danmakus_root")[0]
