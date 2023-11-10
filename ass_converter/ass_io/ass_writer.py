@@ -131,8 +131,6 @@ class AssWriter:
         time_str_end = cls.__get_ass_time_str(next_time_s)
         style = "Default"
 
-        if single_data["prefix"] != "56":
-            a = 10
         prefix = re.sub(r"\W", "", single_data["prefix"])   # 转发同传会加一个特殊符号 这个符号一般来说是可以用\W过滤的
         text = re.sub(r"\W", "", single_data["text"])
         if AssConverterConfig.ass_style.get(prefix) is not None:
