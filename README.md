@@ -17,6 +17,8 @@
 + MatsuriICU的xml格式弹幕
 + Danmakus的json格式弹幕【推荐】
 + Danmakus的xml格式弹幕
++ Blrec的xml格式弹幕【推荐】
++ 唧唧Down的xml格式弹幕
 
 ### 注意
 1.同一场直播的弹幕会互相合并至同一个文件内，且不会去重。故本身支持碎片弹幕整合，所以也尽可能不要将一场直播中弹幕时间有交集的片段进行一次性转换。会导致弹幕重复。
@@ -25,9 +27,11 @@
 
 3.Matsuri的弹幕如果是仅包含同传弹幕（网页端下载时选择的），则需要将ass_converter_config.yaml中matsuriicu_full_danmu改为False。
 
-4.Danmakus的xml格式弹幕并非标准xml格式，在代码侧是做了特殊处理的。
+4.**Danmakus的xml格式弹幕并非标准xml格式！不建议使用。**
 
-5.工具支持根据同传的前缀（示例：uru【】，此时前缀为uru）自动设置字幕样式。需要在ass_converter_config.yaml的ass_style下新增内容。
+5.**唧唧Down的xml格式弹幕内容缺失较大，如用户名和开始时间均无法获取。不建议使用。**
+
+6.工具支持根据同传的前缀（示例：uru【】，此时前缀为uru）自动设置字幕样式。需要在ass_converter_config.yaml的ass_style下新增内容。
 
     示例
     
@@ -66,6 +70,12 @@
 	
 	MatsuriICU的xml格式弹幕加载器
 	matsuri_icu_xml_loader.py
+ 
+	Blrec的xml格式弹幕加载器
+	blrec_xml_loader.py
+ 
+	唧唧Down的xml格式弹幕加载器
+	jjdown_xml_loader.py
 ### log 日志
 	日志实现
 	logger.py
