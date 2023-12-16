@@ -11,6 +11,7 @@ from loader.danmakus_json_loader import DanmakusJSONLoader
 from loader.danmakus_xml_loader import DanmakusXMLLoader
 from loader.blrec_xml_loader import BlrecXMLLoader
 from loader.jjdown_xml_loader import JJDownXMLLoader
+from loader.oksy_xml_loader import OksyXMLLoader
 from log.logger import Logger
 
 
@@ -23,6 +24,7 @@ class LoaderType(enum.IntEnum):
     LOADER_TYPE_DANMAKUS_XML = 5            # Danmakus的xml
     LOADER_TYPE_BLREC_XML = 6               # blrec录播工具的xml
     LOADER_TYPE_JJDOWN_XML = 7              # 唧唧Down下载工具的xml
+    LOADER_TYPE_OKSY_XML = 8                # 使用oksy录制的xml
 
 
 class LoaderFactory:
@@ -45,6 +47,8 @@ class LoaderFactory:
                 return BlrecXMLLoader(src_file, loader_data_dict["data"])
             case LoaderType.LOADER_TYPE_JJDOWN_XML:
                 return JJDownXMLLoader(src_file, loader_data_dict["data"])
+            case LoaderType.LOADER_TYPE_OKSY_XML:
+                return OksyXMLLoader(src_file, loader_data_dict["data"])
         Logger.error(f"无法获取 {src_file} 的加载器类型 !")
         return None
 
@@ -86,6 +90,9 @@ class LoaderFactory:
                     str.find(dom_tree.getElementsByTagName("recorder")[0].firstChild.data, "blrec") != -1:
                 # 有recorder且对应内容为blrec的弹幕文件
                 return {"type": LoaderType.LOADER_TYPE_BLREC_XML, "data": dom_tree}
+            elif len(dom_tree.getElementsByTagName("creator_info")) != 0:
+                # 有creator_info的为oksy格式弹幕文件
+                return {"type": LoaderType.LOADER_TYPE_OKSY_XML, "data": dom_tree}
             else:
                 # Matsuri和唧唧Down的弹幕文件几乎没有特征 直接放在else里
                 # 它们依赖文件名做判断
