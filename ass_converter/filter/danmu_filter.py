@@ -1,13 +1,11 @@
 import re
 
-pattern = re.compile(f"【")
-
 
 # 弹幕过滤器
 class DanmuFilter:
     @classmethod
     def filter_check(cls, text: str) -> bool:
-        return pattern.search(text) is not None
+        return re.match(r".{0,4}【", text) is not None
 
     @classmethod
     def filter_sub(cls, text: str):
